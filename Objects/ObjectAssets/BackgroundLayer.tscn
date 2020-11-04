@@ -1,0 +1,13 @@
+[gd_scene format=2]
+
+[node name="BackgroundLayer" type="CanvasLayer"]
+layer = 0
+
+[node name="Background" type="ColorRect" parent="."]
+show_behind_parent = true
+margin_right = 1920.0
+margin_bottom = 1080.0
+color = Color( 0.254902, 0.254902, 0.254902, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
