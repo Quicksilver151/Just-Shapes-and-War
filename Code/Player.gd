@@ -4,11 +4,8 @@ var direction = Vector2.ZERO
 var current_direction = Vector2.ZERO
 
 var touch_position = Vector2.ZERO
+var current_finger_position = Vector2.ZERO
 var drag_position = Vector2.ZERO
-
-var x = 0
-var y = 0
-
 var touching = false
 
 var dashing = false
@@ -38,6 +35,10 @@ func find_player_coordinates():
 	Global.player_coordinates.x = floor(position.x/32)
 	Global.player_coordinates.y = floor(position.y/32)
 	print(Global.player_coordinates)
+
+
+var x = 0
+var y = 0
 
 func topdown_movement(speed,delta):
 	if !dashing:
@@ -72,11 +73,26 @@ func _input(event):
 		if event.is_pressed() and !touching:
 			touching = true
 			touch_position = event.position
-		
+			drag_position = event.position
+			current_finger_position.x = round(drag_position.x)
+			current_finger_position.y = round(drag_position.y)
+		Global.touch_coordinates = str(Vector2(event.position.x.round(),event.position.y.round()))
 	if event is InputEventScreenDrag:
+		touching = true
 		drag_position = event.position
+		current_finger_position.x = round(drag_position.x)
+		current_finger_position.y = round(drag_position.y)
 
 func touch_screen_movement():
-	direction = drag_position - touch_position
-	Global.touch_coordinates = str(direction)
-	return direction
+	var variable_speed = speed
+	
+	if touching:
+		direction = drag_position - touch_position
+		if direction.length() < 50:
+			direction = Vector2.ZERO
+		elif direction.length() < 300:
+			variable_speed = lerp(0,speed,direction.length()/300)
+	else:
+		direction = Vector2.ZERO
+	Global.touch_coordinates = str(current_finger_position)
+	return direction.normalized() * variable_speed

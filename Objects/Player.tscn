@@ -110,6 +110,7 @@ scale = Vector2( 1.52381, 1.52381 )
 texture = ExtResource( 3 )
 texture_scale = 3.0
 color = Color( 0, 1, 1, 1 )
+range_layer_min = -1
 shadow_enabled = true
 
 [node name="Camera2D" type="Camera2D" parent="."]

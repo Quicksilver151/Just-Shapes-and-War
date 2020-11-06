@@ -1,7 +1,7 @@
 [gd_scene format=2]
 
 [node name="BackgroundLayer" type="CanvasLayer"]
-layer = 0
+layer = -1
 
 [node name="Background" type="ColorRect" parent="."]
 show_behind_parent = true

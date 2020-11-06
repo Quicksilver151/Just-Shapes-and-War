@@ -8,5 +8,5 @@ func _process(delta):
 	coordinates()
 
 func coordinates():
-	$Coordinates.text = Global.touch_coordinates
+	$Coordinates.text = "Touch Coords: "+Global.touch_coordinates
 

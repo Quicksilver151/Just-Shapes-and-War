@@ -5,6 +5,7 @@
 [ext_resource path="res://Objects/ObjectAssets/ObjectAssetCode/MarginContainer.gd" type="Script" id=3]
 
 [node name="Overlay" type="CanvasLayer"]
+layer = 2
 
 [node name="Info" type="Control" parent="."]
 margin_right = 40.0
