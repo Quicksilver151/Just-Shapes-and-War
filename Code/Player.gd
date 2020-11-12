@@ -76,12 +76,12 @@ func _input(event):
 	
 	if event is InputEventScreenTouch:
 		if event.is_pressed() and !touching:
-			TouchUI.position = current_finger_position
 			touching = true
 			touch_position = event.position
 			drag_position = event.position
 			current_finger_position.x = round(drag_position.x)
 			current_finger_position.y = round(drag_position.y)
+			TouchUI.position = current_finger_position
 #		Global.touch_coordinates = str(Vector2(event.position.x.round(),event.position.y.round()))
 	
 	if event is InputEventScreenDrag:
@@ -100,8 +100,8 @@ func touch_screen_movement():
 			direction = Vector2.ZERO
 		elif direction.length() < 64:
 			variable_speed = lerp(0,speed,direction.length()/64)
-			$CanvasLayer/TouchUI/Direction.position = variable_speed*direction.normalized()
 	else:
 		direction = Vector2.ZERO
 	Global.touch_coordinates = str(current_finger_position)
+	$CanvasLayer/TouchUI/Direction.position = variable_speed/4 *direction.normalized()
 	return direction.normalized() * variable_speed
