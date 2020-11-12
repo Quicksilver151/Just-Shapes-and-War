@@ -30,10 +30,14 @@ BackgroundLayer="*res://Objects/ObjectAssets/BackgroundLayer.tscn"
 Overlay="*res://Objects/ObjectAssets/Overlay.tscn"
 Global="*res://Code/Globals.gd"
 
+[debug]
+
+settings/fps/force_fps=30
+
 [display]
 
 window/stretch/mode="2d"
-window/stretch/aspect="keep_height"
+window/stretch/aspect="keep_width"
 
 [gdnative]
 
@@ -41,4 +45,8 @@ singletons=[ "res://git_api.gdnlib" ]
 
 [rendering]
 
+quality/2d/use_pixel_snap=true
+quality/shadows/filter_mode.mobile=1
+quality/filters/use_nearest_mipmap_filter=true
+quality/filters/msaa=1
 environment/default_environment="res://default_env.tres"

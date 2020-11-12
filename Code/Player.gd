@@ -17,9 +17,12 @@ export(float,0,1000,0.1) var friction = 15
 export(PackedScene) var boost_particle:PackedScene
 
 func _process(delta):
-#	current_direction = move_and_slide(topdown_movement(speed,delta)) / speed
-#	print(current_direction)
-	move_and_slide(touch_screen_movement())
+	var dir1 = topdown_movement(speed,delta)
+	var dir2 = touch_screen_movement()
+	if dir1:
+		current_direction = move_and_slide(dir1)/speed
+	else:
+		move_and_slide(dir2)
 	
 	if Input.is_action_just_pressed("dash") and !dashing and !cooldown and current_direction.length() >= 0.1:
 		dashing = true
@@ -53,7 +56,7 @@ func topdown_movement(speed,delta):
 		direction.y = lerp(direction.y,Vector2(x,y).normalized().y,friction*delta)
 	
 #	print(direction *speed)
-	return direction * speed
+	return direction
 	
 
 func dash():
@@ -88,10 +91,10 @@ func touch_screen_movement():
 	
 	if touching:
 		direction = drag_position - touch_position
-		if direction.length() < 50:
+		if direction.length() < 10:
 			direction = Vector2.ZERO
-		elif direction.length() < 300:
-			variable_speed = lerp(0,speed,direction.length()/300)
+		elif direction.length() < 128:
+			variable_speed = lerp(0,speed,direction.length()/128)
 	else:
 		direction = Vector2.ZERO
 	Global.touch_coordinates = str(current_finger_position)
