@@ -15,14 +15,15 @@ export(float,0,1000,0.1) var speed = 350
 export(float,0,1000,0.1) var friction = 15
 
 export(PackedScene) var boost_particle:PackedScene
+onready var TouchUI = $CanvasLayer/TouchUI
 
 func _process(delta):
-	var dir1 = topdown_movement(speed,delta)
-	var dir2 = touch_screen_movement()
-	if dir1:
-		current_direction = move_and_slide(dir1)/speed
+	
+	if OS.get_name() == "Android" or (OS.has_touchscreen_ui_hint() and OS.get_name() == "HTML5"):
+		move_and_slide(touch_screen_movement())
+		TouchUI.visible = touching
 	else:
-		move_and_slide(dir2)
+		direction = move_and_slide(topdown_movement(speed,delta)*speed)/speed
 	
 	if Input.is_action_just_pressed("dash") and !dashing and !cooldown and current_direction.length() >= 0.1:
 		dashing = true
@@ -72,29 +73,34 @@ func dash():
 
 func _input(event):
 	touching = false
+	
 	if event is InputEventScreenTouch:
 		if event.is_pressed() and !touching:
+			TouchUI.position = current_finger_position
 			touching = true
 			touch_position = event.position
 			drag_position = event.position
 			current_finger_position.x = round(drag_position.x)
 			current_finger_position.y = round(drag_position.y)
-		Global.touch_coordinates = str(Vector2(event.position.x.round(),event.position.y.round()))
+#		Global.touch_coordinates = str(Vector2(event.position.x.round(),event.position.y.round()))
+	
 	if event is InputEventScreenDrag:
 		touching = true
 		drag_position = event.position
 		current_finger_position.x = round(drag_position.x)
 		current_finger_position.y = round(drag_position.y)
+	
 
 func touch_screen_movement():
 	var variable_speed = speed
 	
 	if touching:
 		direction = drag_position - touch_position
-		if direction.length() < 10:
+		if direction.length() < 5:
 			direction = Vector2.ZERO
-		elif direction.length() < 128:
-			variable_speed = lerp(0,speed,direction.length()/128)
+		elif direction.length() < 64:
+			variable_speed = lerp(0,speed,direction.length()/64)
+			$CanvasLayer/TouchUI/Direction.position = variable_speed*direction.normalized()
 	else:
 		direction = Vector2.ZERO
 	Global.touch_coordinates = str(current_finger_position)
